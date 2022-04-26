@@ -1,32 +1,38 @@
 package jp.co.axa.apidemo.integration.entities;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
+/**
+ * Employee Entity class (EMPLOYEE table)
+ * 
+ * @author Florian
+ *
+ */
 @Entity
 @Table(name="EMPLOYEE")
 @Getter
 @Setter
-public class EmployeeEntity {
+public class EmployeeEntity extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name="EMPLOYEE_NAME")
+	/** Employee name **/
+	@Column(name="EMPLOYEE_NAME")
     private String name;
 
+	/** Current employee salary**/
     @Column(name="EMPLOYEE_SALARY")
-    private Integer salary;
+    private Float salary;
 
-    @Column(name="DEPARTMENT")
-    private String department;
-
+    /** Affected department **/
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="DEPARTMENT_ID")
+    private DepartmentEntity department;
+    
 }
