@@ -1,7 +1,8 @@
-package jp.co.axa.apidemo.services;
+package jp.co.axa.apidemo.business.services;
 
-import jp.co.axa.apidemo.entities.Employee;
-import jp.co.axa.apidemo.repositories.EmployeeRepository;
+import jp.co.axa.apidemo.integration.entities.EmployeeEntity;
+import jp.co.axa.apidemo.integration.repositories.EmployeeRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,17 +19,17 @@ public class EmployeeServiceImpl implements EmployeeService{
         this.employeeRepository = employeeRepository;
     }
 
-    public List<Employee> retrieveEmployees() {
-        List<Employee> employees = employeeRepository.findAll();
+    public List<EmployeeEntity> retrieveEmployees() {
+        List<EmployeeEntity> employees = employeeRepository.findAll();
         return employees;
     }
 
-    public Employee getEmployee(Long employeeId) {
-        Optional<Employee> optEmp = employeeRepository.findById(employeeId);
+    public EmployeeEntity getEmployee(Long employeeId) {
+        Optional<EmployeeEntity> optEmp = employeeRepository.findById(employeeId);
         return optEmp.get();
     }
 
-    public void saveEmployee(Employee employee){
+    public void saveEmployee(EmployeeEntity employee){
         employeeRepository.save(employee);
     }
 
@@ -36,7 +37,7 @@ public class EmployeeServiceImpl implements EmployeeService{
         employeeRepository.deleteById(employeeId);
     }
 
-    public void updateEmployee(Employee employee) {
+    public void updateEmployee(EmployeeEntity employee) {
         employeeRepository.save(employee);
     }
 }

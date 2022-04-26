@@ -1,7 +1,8 @@
-package jp.co.axa.apidemo.controllers;
+package jp.co.axa.apidemo.web.controllers;
 
-import jp.co.axa.apidemo.entities.Employee;
-import jp.co.axa.apidemo.services.EmployeeService;
+import jp.co.axa.apidemo.business.services.EmployeeService;
+import jp.co.axa.apidemo.integration.entities.EmployeeEntity;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,18 +20,18 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees")
-    public List<Employee> getEmployees() {
-        List<Employee> employees = employeeService.retrieveEmployees();
+    public List<EmployeeEntity> getEmployees() {
+        List<EmployeeEntity> employees = employeeService.retrieveEmployees();
         return employees;
     }
 
     @GetMapping("/employees/{employeeId}")
-    public Employee getEmployee(@PathVariable(name="employeeId")Long employeeId) {
+    public EmployeeEntity getEmployee(@PathVariable(name="employeeId")Long employeeId) {
         return employeeService.getEmployee(employeeId);
     }
 
     @PostMapping("/employees")
-    public void saveEmployee(Employee employee){
+    public void saveEmployee(EmployeeEntity employee){
         employeeService.saveEmployee(employee);
         System.out.println("Employee Saved Successfully");
     }
@@ -42,9 +43,9 @@ public class EmployeeController {
     }
 
     @PutMapping("/employees/{employeeId}")
-    public void updateEmployee(@RequestBody Employee employee,
+    public void updateEmployee(@RequestBody EmployeeEntity employee,
                                @PathVariable(name="employeeId")Long employeeId){
-        Employee emp = employeeService.getEmployee(employeeId);
+        EmployeeEntity emp = employeeService.getEmployee(employeeId);
         if(emp != null){
             employeeService.updateEmployee(employee);
         }
