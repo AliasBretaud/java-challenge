@@ -1,12 +1,19 @@
 package jp.co.axa.apidemo.web.controllers;
 
-import jp.co.axa.apidemo.business.services.EmployeeService;
-import jp.co.axa.apidemo.integration.entities.EmployeeEntity;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import jp.co.axa.apidemo.business.model.Employee;
+import jp.co.axa.apidemo.business.services.EmployeeService;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -20,18 +27,17 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees")
-    public List<EmployeeEntity> getEmployees() {
-        List<EmployeeEntity> employees = employeeService.retrieveEmployees();
-        return employees;
+    public List<Employee> getEmployees() {
+    	return employeeService.retrieveEmployees();
     }
 
     @GetMapping("/employees/{employeeId}")
-    public EmployeeEntity getEmployee(@PathVariable(name="employeeId")Long employeeId) {
+    public Employee getEmployee(@PathVariable(name="employeeId")Long employeeId) {
         return employeeService.getEmployee(employeeId);
     }
 
     @PostMapping("/employees")
-    public void saveEmployee(EmployeeEntity employee){
+    public void saveEmployee(Employee employee){
         employeeService.saveEmployee(employee);
         System.out.println("Employee Saved Successfully");
     }
@@ -43,9 +49,9 @@ public class EmployeeController {
     }
 
     @PutMapping("/employees/{employeeId}")
-    public void updateEmployee(@RequestBody EmployeeEntity employee,
+    public void updateEmployee(@RequestBody Employee employee,
                                @PathVariable(name="employeeId")Long employeeId){
-        EmployeeEntity emp = employeeService.getEmployee(employeeId);
+        Employee emp = employeeService.getEmployee(employeeId);
         if(emp != null){
             employeeService.updateEmployee(employee);
         }

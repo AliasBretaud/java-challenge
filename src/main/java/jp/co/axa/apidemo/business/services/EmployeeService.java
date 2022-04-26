@@ -2,7 +2,7 @@ package jp.co.axa.apidemo.business.services;
 
 import java.util.List;
 
-import jp.co.axa.apidemo.integration.entities.EmployeeEntity;
+import jp.co.axa.apidemo.business.model.Employee;
 
 /**
  * Employee business service. Employee domain data access and moification
@@ -16,7 +16,7 @@ public interface EmployeeService {
 	 * Retrieve all the employees
 	 * @return a list containing employees presents in database
 	 */
-    public List<EmployeeEntity> retrieveEmployees();
+    public List<Employee> retrieveEmployees();
 
     /**
      * Get an employee by its ID
@@ -24,14 +24,15 @@ public interface EmployeeService {
      * 			Employee ID
      * @return retrieved employee
      */
-    public EmployeeEntity getEmployee(Long employeeId);
+    public Employee getEmployee(Long employeeId);
 
     /**
      * Save a new employee in database
      * @param employee
      * 			Employee object
+     * @return created employee
      */
-    public void saveEmployee(EmployeeEntity employee);
+    public Employee saveEmployee(Employee employee);
 
     /**
      * Delete an employee in database
@@ -45,5 +46,5 @@ public interface EmployeeService {
      * @param employee
      * 			Employee object
      */
-    public void updateEmployee(EmployeeEntity employee);
+    public Employee updateEmployee(Employee employee);
 }

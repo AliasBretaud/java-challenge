@@ -1,5 +1,8 @@
 package jp.co.axa.apidemo.util.mapper;
 
+import java.util.List;
+
+import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 
 import jp.co.axa.apidemo.business.model.Employee;
@@ -29,4 +32,7 @@ public interface EmployeeMapper {
 	 * @return converted employee entity object
 	 */
     EmployeeEntity businessToEntity(Employee employee);
+    
+    @IterableMapping(elementTargetType = Employee.class)
+    List<Employee> entityToBusiness(List<EmployeeEntity> empEntities);
 }

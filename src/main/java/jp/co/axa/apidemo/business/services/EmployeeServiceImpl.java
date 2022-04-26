@@ -6,8 +6,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jp.co.axa.apidemo.business.model.Employee;
 import jp.co.axa.apidemo.integration.entities.EmployeeEntity;
 import jp.co.axa.apidemo.integration.repositories.EmployeeRepository;
+import jp.co.axa.apidemo.util.mapper.EmployeeMapper;
 /**
  * Employee business service implementation
  * @author Florian
@@ -18,6 +20,9 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Autowired
     private EmployeeRepository employeeRepository;
+    
+    @Autowired
+    private EmployeeMapper employeeMapper;
 
     /**
      * {@inheritDoc}
@@ -29,24 +34,25 @@ public class EmployeeServiceImpl implements EmployeeService{
     /**
      * {@inheritDoc}
      */
-    public List<EmployeeEntity> retrieveEmployees() {
+    public List<Employee> retrieveEmployees() {
         List<EmployeeEntity> employees = employeeRepository.findAll();
-        return employees;
+        return employeeMapper.entityToBusiness(employees);
     }
 
     /**
      * {@inheritDoc}
      */
-    public EmployeeEntity getEmployee(Long employeeId) {
+    public Employee getEmployee(Long employeeId) {
         Optional<EmployeeEntity> optEmp = employeeRepository.findById(employeeId);
-        return optEmp.get();
+        return employeeMapper.entityToBusiness(optEmp.get());
     }
 
     /**
      * {@inheritDoc}
      */
-    public void saveEmployee(EmployeeEntity employee){
-        employeeRepository.save(employee);
+    public Employee saveEmployee(Employee employee){
+        EmployeeEntity emp = employeeRepository.save(employeeMapper.businessToEntity(employee));
+        return employeeMapper.entityToBusiness(emp);
     }
 
     /**
@@ -59,7 +65,9 @@ public class EmployeeServiceImpl implements EmployeeService{
     /**
      * {@inheritDoc}
      */
-    public void updateEmployee(EmployeeEntity employee) {
-        employeeRepository.save(employee);
+    public Employee updateEmployee(Employee employee) {
+        EmployeeEntity emp = employeeRepository.save(employeeMapper.businessToEntity(employee));
+        return employeeMapper.entityToBusiness(emp);
     }
+
 }
