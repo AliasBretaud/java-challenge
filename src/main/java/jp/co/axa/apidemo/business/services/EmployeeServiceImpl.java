@@ -1,11 +1,11 @@
 package jp.co.axa.apidemo.business.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jp.co.axa.apidemo.business.exceptions.EmployeeNotFoundException;
 import jp.co.axa.apidemo.business.model.Employee;
 import jp.co.axa.apidemo.integration.entities.EmployeeEntity;
 import jp.co.axa.apidemo.integration.repositories.EmployeeRepository;
@@ -35,16 +35,17 @@ public class EmployeeServiceImpl implements EmployeeService{
      * {@inheritDoc}
      */
     public List<Employee> retrieveEmployees() {
-        List<EmployeeEntity> employees = employeeRepository.findAll();
-        return employeeMapper.entityToBusiness(employees);
+        return employeeMapper.entityToBusiness(employeeRepository.findAll());
     }
 
     /**
      * {@inheritDoc}
      */
     public Employee getEmployee(Long employeeId) {
-        Optional<EmployeeEntity> optEmp = employeeRepository.findById(employeeId);
-        return employeeMapper.entityToBusiness(optEmp.get());
+        EmployeeEntity emp = employeeRepository.findById(employeeId)
+        		.orElseThrow(() -> 
+        			new EmployeeNotFoundException(String.format("No employee found with ID %d", employeeId)));
+        return employeeMapper.entityToBusiness(emp);
     }
 
     /**
