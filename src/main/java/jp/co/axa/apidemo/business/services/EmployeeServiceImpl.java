@@ -2,6 +2,8 @@ package jp.co.axa.apidemo.business.services;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,7 @@ import jp.co.axa.apidemo.business.model.Employee;
 import jp.co.axa.apidemo.integration.entities.EmployeeEntity;
 import jp.co.axa.apidemo.integration.repositories.EmployeeRepository;
 import jp.co.axa.apidemo.util.mapper.EmployeeMapper;
+
 /**
  * Employee business service implementation
  * @author Florian
@@ -24,9 +27,6 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Autowired
     private EmployeeMapper employeeMapper;
 
-    /**
-     * {@inheritDoc}
-     */
     public void setEmployeeRepository(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
@@ -34,14 +34,17 @@ public class EmployeeServiceImpl implements EmployeeService{
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Employee> retrieveEmployees() {
-        return employeeMapper.entityToBusiness(employeeRepository.findAll());
+    	List<EmployeeEntity> emps = employeeRepository.findAll();
+        return employeeMapper.entityToBusiness(emps);
     }
 
     /**
      * {@inheritDoc}
      */
-    public Employee getEmployee(Long employeeId) {
+    @Override
+    public Employee getEmployee(final Long employeeId) {
         EmployeeEntity emp = employeeRepository.findById(employeeId)
         		.orElseThrow(() -> 
         			new EmployeeNotFoundException(String.format("No employee found with ID %d", employeeId)));
@@ -51,7 +54,8 @@ public class EmployeeServiceImpl implements EmployeeService{
     /**
      * {@inheritDoc}
      */
-    public Employee saveEmployee(Employee employee){
+    @Override
+    public Employee saveEmployee(final @Valid Employee employee){
         EmployeeEntity emp = employeeRepository.save(employeeMapper.businessToEntity(employee));
         return employeeMapper.entityToBusiness(emp);
     }
@@ -59,16 +63,38 @@ public class EmployeeServiceImpl implements EmployeeService{
     /**
      * {@inheritDoc}
      */
-    public void deleteEmployee(Long employeeId){
+    @Override
+    public void deleteEmployee(final Long employeeId){
+    	
+    	// Verify that employee actually exists
+    	checkEmployeeExists(employeeId);
         employeeRepository.deleteById(employeeId);
     }
 
     /**
      * {@inheritDoc}
      */
-    public Employee updateEmployee(Employee employee) {
+    @Override
+    public Employee updateEmployee(final @Valid Employee employee) {
+    	
+    	// Verify that employee actually exists
+    	checkEmployeeExists(employee);
+    	
         EmployeeEntity emp = employeeRepository.save(employeeMapper.businessToEntity(employee));
         return employeeMapper.entityToBusiness(emp);
+    }
+    
+    private void checkEmployeeExists(final Long employeeId) {
+    	final Employee emp = new Employee();
+    	emp.setId(employeeId);
+    	checkEmployeeExists(emp);
+    }
+    
+    private void checkEmployeeExists(final Employee employee) {
+    	if (employee == null || !employeeRepository.existsById(employee.getId())) {
+    		Long employeeId = employee != null ? employee.getId() : null;
+    		throw new EmployeeNotFoundException(String.format("No employee found with ID %d", employeeId));
+    	}
     }
 
 }

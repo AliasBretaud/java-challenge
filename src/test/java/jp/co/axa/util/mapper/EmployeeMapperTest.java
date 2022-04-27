@@ -1,6 +1,10 @@
 package jp.co.axa.util.mapper;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -23,11 +27,12 @@ public class EmployeeMapperTest {
 	
 	/**
 	 * Testing conversion from Employee to EmployeeEntity object
+	 * Expected : All fields are mapped from entity to business object
 	 */
 	@Test
-	public void mapEmployeeToBusiness() {
+	public void mapEmployeeToBusinessTestOk() {
 		// Prepare
-		final EmployeeEntity emplEntity = new EmployeeEntity();
+		EmployeeEntity emplEntity = new EmployeeEntity();
 		emplEntity.setId(1L);
 		emplEntity.setName("Bob");
 		emplEntity.setSalary(1255.4F);
@@ -44,13 +49,16 @@ public class EmployeeMapperTest {
 		Department department = employee.getDepartment();
 		assertEquals((Long) 1L, department.getId());
 		assertEquals("Accounting", department.getLabel());
+		emplEntity = null;
+		assertNull(employeeMapper.entityToBusiness(emplEntity));
 	}
 	
 	/**
 	 * Testing conversion from EmployeeEntity to Employee object
+	 * Expected : All fields are mapped from to business object to entity
 	 */
 	@Test
-	public void mapEmployeeToEntity() {
+	public void mapEmployeeToEntityTestOk() {
 		// Prepare
 		final Employee empl = new Employee();
 		empl.setId(1L);
@@ -69,5 +77,36 @@ public class EmployeeMapperTest {
 		DepartmentEntity departmentEntity = employeeEntity.getDepartment();
 		assertEquals((Long) 1L, departmentEntity.getId());
 		assertEquals("Accounting", departmentEntity.getLabel());
+		assertNull(employeeMapper.businessToEntity(null));
+	}
+	
+	/**
+	 * Testing conversion from List of EmployeeEntity to List of Employee object
+	 * Expected : All fields are mapped from to business object to entity
+	 */
+	@Test
+	public void mapEntityToBusinessListTestOk() {
+		// Prepare
+		EmployeeEntity emplEntity = new EmployeeEntity();
+		emplEntity.setId(1L);
+		emplEntity.setName("Bob");
+		emplEntity.setSalary(1255.4F);
+		final DepartmentEntity depEntity = new DepartmentEntity();
+		depEntity.setId(1L);
+		depEntity.setLabel("Accounting");
+		emplEntity.setDepartment(depEntity);
+		// Execute
+		List<Employee> employees = employeeMapper.entityToBusiness(Arrays.asList(emplEntity));
+		// Assert
+		assertEquals(1, employees.size());
+		Employee employee = employees.get(0);
+		assertEquals((Long) 1L, employee.getId());
+		assertEquals("Bob", employee.getName());
+		assertEquals((Float) 1255.4F, employee.getSalary());
+		Department department = employee.getDepartment();
+		assertEquals((Long) 1L, department.getId());
+		assertEquals("Accounting", department.getLabel());
+		List<EmployeeEntity> empsNull = null;
+		assertNull(employeeMapper.entityToBusiness(empsNull));
 	}
 }

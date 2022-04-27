@@ -1,5 +1,8 @@
 package jp.co.axa.apidemo.business.model;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -19,9 +22,11 @@ public class Employee {
 	private Long id;
 	
 	/** Employee name**/
+	@NotBlank
 	private String name;
 	
 	/** Current employee salary**/
+	@NotNull
 	private Float salary;
 	
 	/** Affected department **/

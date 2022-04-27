@@ -13,6 +13,12 @@ import jp.co.axa.apidemo.business.exceptions.EmployeeNotFoundException;
 @ControllerAdvice
 public class ExceptionHelper {
 	
+	/**
+	 * Send exception in HTTP response when EmployeeNotFoundException is raised
+	 * @param ex
+	 * 			Exception
+	 * @return HTTP response with 404 status and exception details
+	 */
 	@ExceptionHandler(EmployeeNotFoundException.class)
 	public ResponseEntity<Object> handleEmployeeNotFoundException(EmployeeNotFoundException ex) {
 		HttpStatus status = HttpStatus.NOT_FOUND;
