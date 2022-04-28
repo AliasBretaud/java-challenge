@@ -159,7 +159,7 @@ public class EmployeeServiceTest {
 		when(employeeRepository.existsById(anyLong())).thenReturn(true);
 		when(employeeRepository.save(any(EmployeeEntity.class))).thenReturn(getEmployeeEntity());
 		// Execute
-		Employee emp = employeeServiceImpl.updateEmployee(getEmployee());
+		Employee emp = employeeServiceImpl.updateEmployee(getEmployee(), 1L);
 		// Assert
 		assertEquals((Long) 1L, emp.getId());
 		assertEquals("Bob", emp.getName());
@@ -179,7 +179,7 @@ public class EmployeeServiceTest {
 		// Prepare
 		when(employeeRepository.existsById(anyLong())).thenReturn(false);
 		// Execute
-		employeeServiceImpl.updateEmployee(getEmployee());
+		employeeServiceImpl.updateEmployee(getEmployee(), 1L);
 	}
 	
 	/**
@@ -189,7 +189,7 @@ public class EmployeeServiceTest {
 	@Test(expected = EmployeeNotFoundException.class)
 	public void updateEmployeeTestKo2() {
 		// Execute
-		employeeServiceImpl.updateEmployee(null);
+		employeeServiceImpl.updateEmployee(null, null);
 	}
 	
 	/**

@@ -1,5 +1,6 @@
 package jp.co.axa.apidemo.business.model;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -27,6 +28,7 @@ public class Employee {
 	
 	/** Current employee salary**/
 	@NotNull
+	@Min(value = 0L, message = "The value must be positive")
 	private Float salary;
 	
 	/** Affected department **/

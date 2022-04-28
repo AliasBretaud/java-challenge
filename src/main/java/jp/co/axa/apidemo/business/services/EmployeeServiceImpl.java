@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import jp.co.axa.apidemo.business.exceptions.EmployeeNotFoundException;
 import jp.co.axa.apidemo.business.model.Employee;
@@ -19,6 +20,7 @@ import jp.co.axa.apidemo.util.mapper.EmployeeMapper;
  *
  */
 @Service
+@Validated
 public class EmployeeServiceImpl implements EmployeeService{
 
     @Autowired
@@ -75,24 +77,17 @@ public class EmployeeServiceImpl implements EmployeeService{
      * {@inheritDoc}
      */
     @Override
-    public Employee updateEmployee(final @Valid Employee employee) {
+    public Employee updateEmployee(final @Valid Employee employee, final Long employeeId) {
     	
     	// Verify that employee actually exists
-    	checkEmployeeExists(employee);
+    	checkEmployeeExists(employeeId);
     	
-        EmployeeEntity emp = employeeRepository.save(employeeMapper.businessToEntity(employee));
-        return employeeMapper.entityToBusiness(emp);
+    	EmployeeEntity empEntity = employeeMapper.businessToEntity(employee);
+        return employeeMapper.entityToBusiness(employeeRepository.save(empEntity));
     }
     
     private void checkEmployeeExists(final Long employeeId) {
-    	final Employee emp = new Employee();
-    	emp.setId(employeeId);
-    	checkEmployeeExists(emp);
-    }
-    
-    private void checkEmployeeExists(final Employee employee) {
-    	if (employee == null || !employeeRepository.existsById(employee.getId())) {
-    		Long employeeId = employee != null ? employee.getId() : null;
+    	if (employeeId == null || !employeeRepository.existsById(employeeId)) {
     		throw new EmployeeNotFoundException(String.format("No employee found with ID %d", employeeId));
     	}
     }

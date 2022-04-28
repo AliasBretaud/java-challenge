@@ -2,8 +2,12 @@ package jp.co.axa.apidemo.business.exceptions.handler;
 
 import java.sql.Timestamp;
 
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -22,6 +26,23 @@ public class ExceptionHelper {
 	@ExceptionHandler(EmployeeNotFoundException.class)
 	public ResponseEntity<Object> handleEmployeeNotFoundException(EmployeeNotFoundException ex) {
 		HttpStatus status = HttpStatus.NOT_FOUND;
+	    ApiException apiException = buildApiException(status, ex);
+	    return new ResponseEntity<Object>(apiException, status);
+	}
+	
+	/**
+	 * Send exception in HTTP response when non valid requests is detected
+	 * @param ex
+	 * 			Exception
+	 * @return HTTP response with 400 status and exception details
+	 */
+	@ExceptionHandler(value = {
+			ConstraintViolationException.class,
+			HttpMessageNotReadableException.class,
+			HttpMediaTypeNotSupportedException.class,
+	})
+	public ResponseEntity<Object> handleInvalidRequestException (Exception ex) {
+		HttpStatus status = HttpStatus.BAD_REQUEST;
 	    ApiException apiException = buildApiException(status, ex);
 	    return new ResponseEntity<Object>(apiException, status);
 	}

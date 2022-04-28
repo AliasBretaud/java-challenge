@@ -2,6 +2,8 @@ package jp.co.axa.apidemo.business.services;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import jp.co.axa.apidemo.business.model.Employee;
 
 /**
@@ -24,7 +26,7 @@ public interface EmployeeService {
      * 			Employee ID
      * @return retrieved employee
      */
-    public Employee getEmployee(Long employeeId);
+    public Employee getEmployee(final Long employeeId);
 
     /**
      * Save a new employee in database
@@ -32,19 +34,21 @@ public interface EmployeeService {
      * 			Employee object
      * @return created employee
      */
-    public Employee saveEmployee(Employee employee);
+    public Employee saveEmployee(final @Valid Employee employee);
 
     /**
      * Delete an employee in database
      * @param employeeId
      * 			Employee ID
      */
-    public void deleteEmployee(Long employeeId);
+    public void deleteEmployee(final Long employeeId);
 
     /**
      * Update an existing employee in database
      * @param employee
      * 			Employee object
+     * @param employeeId
+     * 			ID of employee to update
      */
-    public Employee updateEmployee(Employee employee);
+    public Employee updateEmployee(final @Valid Employee employee, final Long enmployeeId);
 }

@@ -22,10 +22,6 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    public void setEmployeeService(EmployeeService employeeService) {
-        this.employeeService = employeeService;
-    }
-
     @GetMapping("/employees")
     public List<Employee> getEmployees() {
     	return employeeService.retrieveEmployees();
@@ -37,9 +33,10 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees")
-    public void saveEmployee(Employee employee){
-        employeeService.saveEmployee(employee);
+    public Employee saveEmployee(@RequestBody Employee employee){
+        Employee emp = employeeService.saveEmployee(employee);
         System.out.println("Employee Saved Successfully");
+        return emp;
     }
 
     @DeleteMapping("/employees/{employeeId}")
@@ -49,13 +46,9 @@ public class EmployeeController {
     }
 
     @PutMapping("/employees/{employeeId}")
-    public void updateEmployee(@RequestBody Employee employee,
+    public Employee updateEmployee(@RequestBody Employee employee,
                                @PathVariable(name="employeeId")Long employeeId){
-        Employee emp = employeeService.getEmployee(employeeId);
-        if(emp != null){
-            employeeService.updateEmployee(employee);
-        }
-
+    	return employeeService.updateEmployee(employee, employeeId);
     }
 
 }
