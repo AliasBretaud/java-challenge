@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import jp.co.axa.apidemo.business.exceptions.ApiException;
 import jp.co.axa.apidemo.business.exceptions.EmployeeNotFoundException;
 
+/**
+ * Global exception handling. Wraps specifics exceptions raised in the application into a generic error
+ * @author Florian
+ *
+ */
 @ControllerAdvice
 public class ExceptionHelper {
 	
