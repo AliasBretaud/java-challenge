@@ -1,4 +1,4 @@
-package jp.co.axa.apidemo;
+package jp.co.axa.apidemo.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcBuilderCustomizer;

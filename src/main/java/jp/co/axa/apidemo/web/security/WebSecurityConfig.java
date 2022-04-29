@@ -31,8 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             @Override
             public Authentication authenticate(Authentication authentication) throws AuthenticationException {
                 String principal = (String) authentication.getPrincipal();
-                if (!principalRequestValue.equals(principal))
-                {
+                if (!principalRequestValue.equals(principal)) {
                     throw new BadCredentialsException("The API key was not found or not the expected value.");
                 }
                 authentication.setAuthenticated(true);
@@ -40,9 +39,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             }
         });
         httpSecurity.
-            csrf().disable().
-            sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
-            and().addFilter(filter).authorizeRequests().anyRequest().authenticated();
+            csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
+            and().addFilter(filter)
+            .authorizeRequests()
+            .antMatchers("/swagger-ui.html", "/v2/api-docs", "/swagger-resources/**", "/swagger-ui/**", "/webjars/**").permitAll()
+            .anyRequest().authenticated();
     }
 
 }

@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -29,6 +30,9 @@ public class EmployeeControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
+	
+	@Value("${api.auth-header-name}")
+	private String apiKeyHeader;
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
@@ -162,5 +166,12 @@ public class EmployeeControllerTest {
 		
 		mockMvc.perform(delete("/api/v1/employees/3"))
     		.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void badCredentialsTestKo() throws Exception {
+		
+		mockMvc.perform(get("/api/v1/employees").header(apiKeyHeader, ""))
+			.andExpect(status().isForbidden());
 	}
 }
