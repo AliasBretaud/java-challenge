@@ -28,7 +28,7 @@ import jp.co.axa.apidemo.business.model.Employee;
 public class EmployeeControllerTest {
 
 	@Autowired
-    private MockMvc mockMvc;
+	private MockMvc mockMvc;
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
@@ -37,11 +37,9 @@ public class EmployeeControllerTest {
 		
 		mockMvc.perform(get("/api/v1/employees"))
         	.andExpect(status().isOk())
-        	.andExpect(jsonPath("$[0].id", is(1)))
-        	.andExpect(jsonPath("$[0].name", is("Bob")))
-			.andExpect(jsonPath("$[0].salary", is(15000.0)))
-			.andExpect(jsonPath("$[0].department.id", is(1)))
-			.andExpect(jsonPath("$[0].department.label", is("Accounting")));
+        	.andExpect(jsonPath("$[0].id", is(notNullValue())))
+        	.andExpect(jsonPath("$[0].name", is(notNullValue())))
+			.andExpect(jsonPath("$[0].salary", is(notNullValue())));
 	}
 	
 	@Test
@@ -138,14 +136,14 @@ public class EmployeeControllerTest {
 	@Test
 	public void updateEmployeeTestOk() throws Exception {
 		
-		mockMvc.perform(get("/api/v1/employees/1"))
+		mockMvc.perform(get("/api/v1/employees/2"))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.id", is(1)))
-			.andExpect(jsonPath("$.name", is("Bob")))
-			.andExpect(jsonPath("$.salary", is(15000.0)));
+			.andExpect(jsonPath("$.id", is(2)))
+			.andExpect(jsonPath("$.name", is("Ted")))
+			.andExpect(jsonPath("$.salary", is(25000.0)));
 		
 		final Employee emp = new Employee();
-		emp.setId(1L);
+		emp.setId(2L);
 		emp.setName("Test");
 		emp.setSalary(1500F);
 		
@@ -153,7 +151,7 @@ public class EmployeeControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(emp)))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.id", is(1)))
+			.andExpect(jsonPath("$.id", is(2)))
     		.andExpect(jsonPath("$.name", is("Test")))
     		.andExpect(jsonPath("$.salary", is(1500.0)));
 		
@@ -162,7 +160,7 @@ public class EmployeeControllerTest {
 	@Test
 	public void deleteEmployeeTestOk() throws Exception {
 		
-		mockMvc.perform(delete("/api/v1/employees/1"))
+		mockMvc.perform(delete("/api/v1/employees/3"))
     		.andExpect(status().isOk());
 	}
 }
