@@ -10,43 +10,37 @@ Application (with the embedded H2 database) is ready to be used ! You can access
 
 > Don't forget to set the `JDBC URL` value as `jdbc:h2:mem:testdb` for H2 UI.
 
+### Changelog
 
+1.	Architecture
+	- Packages refactoring
+2.	Fix bug, improvements
+	- Decouple model / entities (mapping added via mapstruct)
+	- Send created/updated objects on POST/PUT requests
+	- Global exception treatment (Controller advise)
+3.	Tests
+	- Test data script (data.sql)
+	- Test coverage report (Jacoco)
+	- Unit & integration tests
+4.	Documentation
+	- Comments
+	- Developer guide (doc folder)
+	- Swagger documentation annotations on operations/models
+5.	Security
+	- Add API Key authentication
+6.	Performance
+	- Adding cache on service function retrieving employees data (spring cache)
 
-### Instructions
+#### My experience in Java
 
-- download the zip file of this project
-- create a repository in your own github named 'java-challenge'
-- clone your repository in a folder on your machine
-- extract the zip file in this folder
-- commit and push
+I have 5 years experience in Java and I started to use Spring Boot from 3 years
 
-- Enhance the code in any ways you can see, you are free! Some possibilities:
-  - Add tests
-  - Change syntax
-  - Protect controller end points
-  - Add caching logic for database calls
-  - Improve doc and comments
-  - Fix any bug you might find
-- Edit readme.md and add any comments. It can be about what you did, what you would have done if you had more time, etc.
-- Send us the link of your repository.
+#### If you had more time, I would have
 
-#### Restrictions
-- use java 8
-
-
-#### What we will look for
-- Readability of your code
-- Documentation
-- Comments in your code 
-- Appropriate usage of spring boot
-- Appropriate usage of packages
-- Is the application running as expected
-- No performance issues
-
-#### Your experience in Java
-
-Please let us know more about your Java experience in a few sentences. For example:
-
-- I have 3 years experience in Java and I started to use Spring Boot from last year
-- I'm a beginner and just recently learned Spring Boot
-- I know Spring Boot very well and have been using it for many years
+- Improve security by changing to OAuth2 authentication with client credential flow
+- Implement HATEOAS
+- Divide architecture into micro services
+- Create docker container running the application
+- Set up CI configuration (with GitHub actions)
+- Create more search functions (with dynamic requests, JPA specifications...)
+- Implement log configuration (levels, rolling...)
