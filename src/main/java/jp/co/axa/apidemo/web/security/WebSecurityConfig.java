@@ -12,6 +12,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 
+/**
+ * Authentication configuration to access to API
+ * @author Florian
+ *
+ */
 @Configuration
 @EnableWebSecurity
 @Order(1)
@@ -32,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             public Authentication authenticate(Authentication authentication) throws AuthenticationException {
                 String principal = (String) authentication.getPrincipal();
                 if (!principalRequestValue.equals(principal)) {
-                    throw new BadCredentialsException("The API key was not found or not the expected value.");
+                    throw new BadCredentialsException("Invalid API Key");
                 }
                 authentication.setAuthenticated(true);
                 return authentication;
@@ -42,7 +47,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
             and().addFilter(filter)
             .authorizeRequests()
+            // Authorize free access to Swagger UI
             .antMatchers("/swagger-ui.html", "/v2/api-docs", "/swagger-resources/**", "/swagger-ui/**", "/webjars/**").permitAll()
+            // For other request client has to be authenticated
             .anyRequest().authenticated();
     }
 
